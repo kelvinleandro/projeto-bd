@@ -10,7 +10,7 @@
     http://localhost:5050
     ```
 
-3. usar as credenciais do pgAdmin (dockerfile) no login
+3. usar as credenciais do pgAdmin (do docker-compose) no login
 
 4. (1ª vez) criar novo server
 
@@ -18,4 +18,4 @@
 
     4.2 Port = `5432`
     
-    4.3 Username e Password do postgres (dockerfile)
+    4.3 Username e Password do postgres (do docker-compose)
