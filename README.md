@@ -13,6 +13,7 @@
 3. usar as credenciais do pgAdmin (do docker-compose) no login
 
 4. (1ª vez) criar novo server e BD
+
     4.1 Botão do mouse direito em servers -> Register -> Server...
 
     4.2 General -> Name = `projeto_bd`
