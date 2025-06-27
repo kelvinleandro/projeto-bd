@@ -76,7 +76,6 @@ CREATE TABLE IF NOT EXISTS credit_card(
 
 CREATE TABLE IF NOT EXISTS debit_card(
     id INTEGER NOT NULL,
-    current_balance DECIMAL (12, 3) NOT NULL DEFAULT 0,
     daily_limit DECIMAL (12, 3) NOT NULL DEFAULT 0,
 
     FOREIGN KEY (id) REFERENCES card(id) ON DELETE CASCADE
