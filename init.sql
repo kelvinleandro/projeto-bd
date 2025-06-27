@@ -4,15 +4,17 @@ CREATE DATABASE personal_finance;
 
 CREATE TABLE IF NOT EXISTS app_user (
     cpf CHAR(11) NOT NULL PRIMARY KEY CHECK (cpf ~ '^[0-9]{11}$'),
-    first_name VARCHAR(20) NOT NULL,
-    last_name VARCHAR(20) NOT NULL,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(30) NOT NULL,
     birth_date DATE NOT NULL,
-    email VARCHAR(30) NOT NULL,
+    email VARCHAR(50) NOT NULL,
     tel1 VARCHAR(15) NOT NULL,
     tel2 VARCHAR(15),
-    complement VARCHAR(30),
-    neighborhood VARCHAR(30) NOT NULL,
-    city VARCHAR(30) NOT NULL,
+    street VARCHAR(100) NOT NULL,
+    street_number INTEGER NOT NULL,
+    complement VARCHAR(50),
+    neighborhood VARCHAR(50) NOT NULL,
+    city VARCHAR(50) NOT NULL,
     state VARCHAR(2) NOT NULL,
     zip_code CHAR(8) NOT NULL
 );
@@ -66,8 +68,8 @@ CREATE TABLE IF NOT EXISTS card(
 CREATE TABLE IF NOT EXISTS credit_card(
     id INTEGER NOT NULL,
     current_balance DECIMAL (12, 3) NOT NULL DEFAULT 0,
-    credit_limit DECIMAL (12, 3) NOT NULL DEFAULT 0,
     invoice_due_date DATE NOT NULL,
+    credit_limit DECIMAL (12, 3) NOT NULL DEFAULT 0,
 
     FOREIGN KEY (id) REFERENCES card(id) ON DELETE CASCADE
 );
@@ -87,11 +89,9 @@ CREATE TABLE IF NOT EXISTS category(
 
 CREATE TABLE IF NOT EXISTS app_transaction (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    -- name VARCHAR(30) NOT NULL,
     value DECIMAL (12, 3) NOT NULL DEFAULT 0,
     type VARCHAR(10) CHECK (type IN ('income', 'expense')) NOT NULL,
     installments BOOLEAN NOT NULL DEFAULT FALSE,
-    date DATE NOT NULL,
     goal_id INTEGER,
     category_id INTEGER,
 
@@ -136,7 +136,6 @@ CREATE INDEX idx_credit_card_id ON credit_card(id);
 CREATE INDEX idx_debit_card_id ON debit_card(id);
 
 -- Índices para filtros por data
-CREATE INDEX idx_app_transaction_date ON app_transaction(date);
 CREATE INDEX idx_transaction_card_date ON transaction_card(date);
 CREATE INDEX idx_transaction_account_date ON transaction_account(date);
 CREATE INDEX idx_goal_date ON goal(date);
