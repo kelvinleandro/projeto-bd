@@ -1,3 +1,15 @@
+/*
+Esta visão foi criada para consolidar as informações de transações, usuários e categorias em um só lugar, 
+facilitando a criação de consultas sobre os detalhes das transações sem a necessidade de realizar junções complexas todas as vezes.
+
+O que ela faz:
+
+Junta as tabelas app_user, account, transaction_account, app_transaction, e category.
+
+Cria uma visão que exibe o nome completo do usuário, o tipo de conta, o valor e tipo da transação,
+ e o nome da categoria para cada transação registrada em uma conta.
+*/
+
 CREATE VIEW user_transaction_details AS
 SELECT
     u.first_name || ' ' || u.last_name AS full_name,
