@@ -26,7 +26,7 @@ JOIN
 WHERE
     u.first_name = 'Luigi' AND u.last_name = 'Guerra'
     AND t.type = 'expense'
-    AND TO_CHAR(ta.date, 'YYYY-MM') = 'yyyy-mm' --  modify the date to the desired month and year
+    AND TO_CHAR(ta.date, 'YYYY-MM') = TO_CHAR(CURRENT_DATE, 'YYYY-MM') -- modify the date to the desired month and year
 GROUP BY
     c.name
 ORDER BY

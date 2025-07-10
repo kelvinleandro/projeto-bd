@@ -28,6 +28,6 @@ JOIN
 JOIN
     app_user u ON a.user_id = u.cpf
 WHERE
-    TO_CHAR(cc.invoice_due_date, 'YYYY-MM') = 'yyyy-mm' -- modify the date to the desired month and year
+    TO_CHAR(cc.invoice_due_date, 'YYYY-MM') = TO_CHAR(CURRENT_DATE, 'YYYY-MM') -- modify the date to the desired month and year
 ORDER BY
     cc.invoice_due_date ASC;
