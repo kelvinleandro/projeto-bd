@@ -1,0 +1,7 @@
+-- -- procedures
+-- -- 1.
+-- SELECT * FROM account ORDER BY id LIMIT 2
+-- -- 2.
+-- CALL transfer(1, 2, 1000)
+-- -- 3.
+-- SELECT * FROM account ORDER BY id LIMIT 2

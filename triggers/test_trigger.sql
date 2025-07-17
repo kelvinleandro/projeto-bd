@@ -1,0 +1,21 @@
+-- -- triggers
+-- -- 1.
+-- INSERT INTO app_user (
+--     cpf, first_name, last_name, birth_date, email, tel1, street,
+--     street_number, neighborhood, city, state, zip_code
+-- )
+-- VALUES (
+--     '98765432101', 'Pedro', 'Pascal', '2001-09-11', 'pedro@do.com', '123456789',
+--     'Main Street', 123, 'Downtown', 'CityX', 'ST', '12345678'
+-- )
+-- INSERT INTO account (balance, user_id)
+-- VALUES (1000.000, '98765432101') -- account id =23
+-- INSERT INTO goal (name, balance, target_value, date, account_id)
+-- VALUES ('Divida Agiota', 0.000, 5000.000, CURRENT_DATE, 23) -- goal id = 13
+-- -- 2.
+-- SELECT * FROM goal WHERE name='Divida Agiota'
+-- -- 3.
+-- INSERT INTO app_transaction (value, type, goal_id, installments)
+-- VALUES (100.000, 'income', 13, FALSE);
+-- -- 4.
+-- SELECT * FROM goal WHERE name='Divida Agiota'
