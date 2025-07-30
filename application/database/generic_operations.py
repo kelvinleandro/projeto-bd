@@ -57,7 +57,55 @@ def update_card(conn, card_id, data):
         except Exception as e: conn.rollback(); raise e
 def get_transactions_for_account(conn, account_id):
     sql = "SELECT t.id, ta.date, c.name as category_name, t.value, t.type FROM app_transaction t JOIN transaction_account ta ON t.id = ta.transaction_id LEFT JOIN category c ON t.category_id = c.id WHERE ta.account_id = %s ORDER BY ta.date DESC, t.id DESC"
-    with conn.cursor(cursor_factory=DictCursor) as cur: cur.execute(sql, (account_id,)); return cur.fetchall()
+    sql = """
+        -- Seleciona transações que saíram diretamente da conta
+        SELECT
+            t.id,
+            ta.date,
+            c.name AS category_name,
+            t.value,
+            t.type,
+            'Conta' AS source,
+            -- Detalhes: ID da conta de origem
+            CAST(a.id AS VARCHAR) AS source_details
+        FROM
+            app_transaction t
+        JOIN
+            transaction_account ta ON t.id = ta.transaction_id
+        JOIN
+            account a ON ta.account_id = a.id
+        LEFT JOIN
+            category c ON t.category_id = c.id
+        WHERE
+            ta.account_id = %s
+
+        UNION ALL
+
+        -- Seleciona transações feitas com um cartão associado à conta
+        SELECT
+            t.id,
+            tc.date,
+            c.name AS category_name,
+            t.value,
+            t.type,
+            'Cartão' AS source,
+            -- Detalhes: 'Final' mais os 4 últimos dígitos do cartão
+            CONCAT('', RIGHT(card.number, 4)) AS source_details
+        FROM
+            app_transaction t
+        JOIN
+            transaction_card tc ON t.id = tc.transaction_id
+        JOIN
+            card ON tc.card_id = card.id
+        LEFT JOIN
+            category c ON t.category_id = c.id
+        WHERE
+            card.account_id = %s
+
+        ORDER BY
+            date DESC, id DESC;
+        """
+    with conn.cursor(cursor_factory=DictCursor) as cur: cur.execute(sql, (account_id,account_id)); return cur.fetchall()
 def add_transaction(conn, data):
     with conn.cursor() as cur:
         try:
@@ -67,6 +115,7 @@ def add_transaction(conn, data):
                 operator = '-' if data['type'] == 'expense' else '+'
                 cur.execute(f"UPDATE account SET balance = balance {operator} %s WHERE id = %s", (data['value'], data['source_id']))
             elif data['source_type'] == 'Cartão':
+                print("Adding transaction for card (%s, %s, %s)", (transaction_id, data['source_id'], data['date']))
                 cur.execute("INSERT INTO transaction_card (transaction_id, card_id, date) VALUES (%s, %s, %s)", (transaction_id, data['source_id'], data['date']))
             conn.commit()
         except Exception as e: conn.rollback(); raise e
